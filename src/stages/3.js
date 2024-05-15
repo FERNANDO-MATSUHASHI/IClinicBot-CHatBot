@@ -3,7 +3,7 @@ import { storage } from '../storage.js'
 import { STAGES } from './index.js'
 
 export const stageThree = {
-  async exec({ from, message }) {
+  async exec({ from, message, especialidade, data }) {
     storage[from].dados_Pessoais = message
     storage[from].stage = STAGES.AGENDAMENTO
 
@@ -14,14 +14,14 @@ export const stageThree = {
       const itens = storage[from].itens
       const especialidade = itens.map((item) => item.description).join(', ')
 
-      const total = storage[from].itens.length
 
       msg =
-        `🗒️ *RESUMO DO AGENDAMENTO*: \n\n👨‍🔬 Especialidade: *${especialidade}* \n📃 Nome, RG e Data Nascimento: *${message}* \n\n` +
-        '🔊 ```Agora, informe a forma de pagamento (Cartão Crédito, Cartão Débito ou PIX).```'
+        `🗒️ *RESUMO DO AGENDAMENTO*: \n\n📃 Nome: *${message}*\n📆Data: *${data}\n*👨‍🔬 Especialidade: *${especialidade}* \n \n\n` +
+        '🔊 ```Agora, informe a forma de pagamento: ```\n\n' +
+        '1️⃣Cartão Crédito\n2️⃣Cartão Débito\n3️⃣PIX'
     }
 
-    await VenomBot.getInstance().sendText({ to: from, message: msg })
+    await VenomBot.getInstance().sendText({ from: from, message: msg, especialidade: especialidade })
 
   },
 }

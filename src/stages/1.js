@@ -1,7 +1,6 @@
 import { VenomBot } from '../venom.js'
 import { menu } from '../menu.js'
 import { storage } from '../storage.js'
-import { neighborhoods } from './neighborhoods.js'
 import { initialStage } from './0.js'
 import { STAGES } from './index.js'
 
