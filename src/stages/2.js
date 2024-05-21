@@ -22,6 +22,7 @@ export const stageTwo = {
   async exec(params) {
     const message = params.message.trim()
     const isMsgValid = /[1|2|3|4|5|#|*]/.test(message)
+
     const agenda = await fetchAgenda()
 
     const dataAgendaList = agenda.map(item => {
@@ -31,7 +32,9 @@ export const stageTwo = {
       const ano = data.getFullYear();
       return `${dia}/${mes}/${ano}`;
     });
-  const dataAgendaJSON = JSON.stringify(dataAgendaList);
+  const dataAgendaJSON = JSON.stringify(dataAgendaList).replace(/[\[\]"]/g, '')
+  const numeroSelecionado = message
+  const especialidade = menu[numeroSelecionado]
 
     let msg =
       '❌ *Digite uma opção válida, por favor.* \n⚠️ ```APENAS UMA OPÇÃO POR VEZ``` ⚠️'
@@ -46,15 +49,25 @@ export const stageTwo = {
           `✅ *${menu[message].description}* selecionado com sucesso! \n\n` +
           '```Data disponível```: \n\n' + dataAgendaJSON +
           '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR atendimento```'
-        storage[params.from].itens.push(menu[message])
+
+        // Adicionado ao itens a Especialidade e a Data
+        storage[params.from].itens.push(menu[message].description)
+        storage[params.from].itens.push(dataAgendaJSON)
+
       }
+
+      // console.log('params: ', params)
 
       if (storage[params.from].stage === STAGES.INICIAL) {
         storage[params.from].itens = []
       }
     }
+    // console.log('storege: ', storage[params.from].itens)
 
-    await VenomBot.getInstance().sendText({ to: params.from, message: msg, data: dataAgendaJSON })
+    await VenomBot.getInstance().sendText({ 
+      to: params.from, 
+      message: msg,
+    })
   },
 }
 
@@ -68,12 +81,13 @@ const options = {
       nextStage: STAGES.INICIAL,
     }
   },
-  '#': () => {
-    const message =
-      '🗺️ Agora, informe o *NOME COMPLETO e IDADE*.\n\n' + '(Nome, Idade)\n' + 
-      '\n-----------------------------------\n*️⃣ - ```CANCELAR atendimento```'
+  '#': (params, from) => {
+    const msg = '*Digite seu NOME e IDADE:*\n' + 
+    '( ```Nome, Idade``` )\n\n'
+    // storage[params.from].itens.push(msg)
     return {
-      message,
+      to: from,
+      message: msg,
       nextStage: STAGES.RESUMO,
     }
   },

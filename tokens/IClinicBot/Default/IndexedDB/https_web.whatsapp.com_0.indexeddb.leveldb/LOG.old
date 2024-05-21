@@ -1,3 +1,7 @@
-2024/05/14-17:26:45.597 a0c Reusing MANIFEST D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
-2024/05/14-17:26:45.598 a0c Recovering log #1130
-2024/05/14-17:26:45.604 a0c Reusing old log D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/001130.log 
+2024/05/21-17:10:16.428 1cb4 Reusing MANIFEST D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/MANIFEST-000001
+2024/05/21-17:10:16.429 1cb4 Recovering log #2612
+2024/05/21-17:10:16.477 1cb4 Reusing old log D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\IndexedDB\https_web.whatsapp.com_0.indexeddb.leveldb/002612.log 
+2024/05/21-17:10:18.701 2750 Level-0 table #2620: started
+2024/05/21-17:10:18.759 2750 Level-0 table #2620: 451090 bytes OK
+2024/05/21-17:10:18.808 2750 Delete type=0 #2612
+2024/05/21-17:10:18.810 1cb4 Manual compaction at level-0 from '\x00\xa8\x00\x00\x00' @ 72057594037927935 : 1 .. '\x00\xa9\x00\x00\x00' @ 0 : 0; will stop at (end)
