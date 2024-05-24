@@ -12,11 +12,11 @@ export const menu = {
     price: 6,
   },
   4: {
-    description: 'Geriatria',
+    description: 'Geriatra',
     price: 6,
   },
   5: {
-    description: 'Cardiologia',
+    description: 'Cardiologista',
     price: 6,
   },
 }

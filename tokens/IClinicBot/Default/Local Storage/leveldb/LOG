@@ -1,3 +1,6 @@
-2024/05/21-17:10:33.789 6660 Reusing MANIFEST D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\Local Storage\leveldb/MANIFEST-000001
-2024/05/21-17:10:33.794 6660 Recovering log #60
-2024/05/21-17:10:33.795 6660 Reusing old log D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\Local Storage\leveldb/000060.log 
+2024/05/24-17:29:00.563 6ffc Reusing MANIFEST D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\Local Storage\leveldb/MANIFEST-000001
+2024/05/24-17:29:00.568 6ffc Recovering log #13
+2024/05/24-17:29:00.569 6ffc Reusing old log D:\Unimar\5º Termo\Projeto Integrador II\IClinicBot-ChatBot\tokens\IClinicBot\Default\Local Storage\leveldb/000013.log 
+2024/05/24-17:30:01.128 5fa0 Level-0 table #17: started
+2024/05/24-17:30:01.242 5fa0 Level-0 table #17: 13420 bytes OK
+2024/05/24-17:30:01.266 5fa0 Delete type=0 #13

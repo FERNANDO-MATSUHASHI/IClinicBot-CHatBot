@@ -3,18 +3,23 @@ import { menu } from '../menu.js'
 import { storage } from '../storage.js'
 import { STAGES } from './index.js'
 
-import axios from 'axios';
-import https from 'https';
+import axios from 'axios'
+import https from 'https'
 
-async function fetchAgenda() {
+async function fetchAgenda(especialidade) {
+  
   try {
-    const response = await axios.get('https://localhost:7112/api/Agenda', {
+    const response = await axios.get('https://localhost:7112/api/AgendaMedico', {
       httpsAgent: new https.Agent({ rejectUnauthorized: false })
     });
-    // console.log(response.data);
-    return response.data;
+
+    const filteredData = response.data.filter(item => item.especialidade === especialidade)
+
+    console.log('Dados filtrados:', filteredData)
+
+    return filteredData
   } catch (error) {
-    console.error('Erro ao obter dados da API:', error);
+    console.error('Erro ao obter dados da API:', error)
   }
 }
 
@@ -22,19 +27,6 @@ export const stageTwo = {
   async exec(params) {
     const message = params.message.trim()
     const isMsgValid = /[1|2|3|4|5|#|*]/.test(message)
-
-    const agenda = await fetchAgenda()
-
-    const dataAgendaList = agenda.map(item => {
-      const data = new Date(item.dataAgenda);
-      const dia = String(data.getDate()).padStart(2, '0');
-      const mes = String(data.getMonth() + 1).padStart(2, '0');
-      const ano = data.getFullYear();
-      return `${dia}/${mes}/${ano}`;
-    });
-  const dataAgendaJSON = JSON.stringify(dataAgendaList).replace(/[\[\]"]/g, '')
-  const numeroSelecionado = message
-  const especialidade = menu[numeroSelecionado]
 
     let msg =
       '❌ *Digite uma opção válida, por favor.* \n⚠️ ```APENAS UMA OPÇÃO POR VEZ``` ⚠️'
@@ -45,6 +37,18 @@ export const stageTwo = {
         msg = option.message
         storage[params.from].stage = option.nextStage
       } else {
+
+        const agenda = await fetchAgenda(menu[message].description)
+
+        const dataAgendaList = agenda.map(item => {
+          const data = new Date(item.dataAgendaDisponivel)
+          const dia = String(data.getDate()).padStart(2, '0')
+          const mes = String(data.getMonth() + 1).padStart(2, '0')
+          const ano = data.getFullYear()
+          return `${dia}/${mes}/${ano}`
+        });
+        const dataAgendaJSON = JSON.stringify(dataAgendaList).replace(/[\[\]"]/g, '')
+
         msg =
           `✅ *${menu[message].description}* selecionado com sucesso! \n\n` +
           '```Data disponível```: \n\n' + dataAgendaJSON +
