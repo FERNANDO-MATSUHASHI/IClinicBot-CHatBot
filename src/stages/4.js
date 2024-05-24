@@ -2,6 +2,9 @@ import { VenomBot } from '../venom.js'
 import { storage } from '../storage.js'
 import { STAGES } from './index.js'
 
+import axios from 'axios'
+import https from 'https'
+
 function addCard(option) {
         if (option == 1){
           return "Cartão de Crédito"
@@ -10,6 +13,27 @@ function addCard(option) {
         } else {
           return "PIX"
         }
+}
+
+function convertDateToISO(dateString) {
+  const [day, month, year] = dateString.split('/').map(Number);
+  const date = new Date(year, month - 1, day, 10, 0, 0);
+  return date.toISOString().split('.')[0];
+}
+
+async function addAgendaChatBot(dados) {
+  
+  try {
+    dados.DataAgendaChatBot = convertDateToISO(dados.DataAgendaChatBot);
+
+    const response = await axios.post('https://localhost:7112/api/AgendaChatBot', dados, {
+      httpsAgent: new https.Agent({ rejectUnauthorized: false })
+    });
+
+    return response.data
+  } catch (error) {
+    console.error('Erro ao obter dados da API:', error)
+  }
 }
 
 export const stageFour = {
@@ -36,12 +60,35 @@ export const stageFour = {
                   '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR atendimento```'
         
         storage[from].itens.push(addCard(message))
+        
+      }
+
+      if (message == '#') {
+        // console.log('storege: ', storage[from].itens)
+        const dados = {
+          DataAgendaChatBot: storage[from].itens[1],
+          Cel: phone[0],
+          Nome: storage[from].itens[2],
+          Especialidade: storage[from].itens[0],
+          FormaPagamento: storage[from].itens[3]
+        };
+        
+        addAgendaChatBot(dados).then(response => {
+          if (response) {
+            console.log('Dados enviados com sucesso:', response);
+          } else {
+            console.log('Falha ao enviar dados.');
+          }
+        });       
+
       }
 
       if (storage[from].stage === STAGES.INICIAL) {
         storage[from].itens = []
       }
     }
+
+    // console.log('storege: ', storage[from].itens)
 
     await VenomBot.getInstance().sendText({ to: from, message: msg })
   },
@@ -58,12 +105,12 @@ const options = {
     }
   },
   '#': () => {
-    const message =
+    const msg =
     '🗺️ Agendamento realizado com sucesso.\n\n ' +
     'IClinicBot agradece seu contato.'
 
     return {
-      message,
+      message: msg,
       nextStage: STAGES.INICIAL,
     }
   },
