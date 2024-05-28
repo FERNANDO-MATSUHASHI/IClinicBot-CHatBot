@@ -1,7 +1,7 @@
 import { VenomBot } from '../venom.js'
 import { storage } from '../storage.js'
 import { STAGES } from './index.js'
-import { pagamento } from '../pagamento.js'
+import { pagamento } from '../tipo_consulta.js'
 
 export const stageThree = {
   async exec({ from, message }) {
@@ -16,7 +16,7 @@ export const stageThree = {
     if (message === '*') {
       storage[from].stage = STAGES.INICIAL
     } else {
-      msg = '💰 ```Agora, informe a forma de pagamento: ```\n\n'
+      msg = '🤔 ```Agora, informe o tipo de consulta: ```\n\n'
 
       Object.keys(pagamento).forEach((value) => {
         msg += `${numbers[value]} - _${pagamento[value].description}_ \n`
@@ -34,5 +34,4 @@ export const stageThree = {
 const numbers = {
   1: '1️⃣',
   2: '2️⃣',
-  3: '3️⃣',
 }

@@ -1,5 +1,6 @@
 import { VenomBot } from '../venom.js'
 import { menu } from '../menu.js'
+import { exame } from '../exame.js'
 import { storage } from '../storage.js'
 import { initialStage } from './0.js'
 import { STAGES } from './index.js'
@@ -32,7 +33,7 @@ export const stageOne = {
 }
 
 const options = {
-  1: () => {
+  1: (from) => {
     let message = '🚨  ESPECIALIDADES  🚨\n\n'
 
     Object.keys(menu).forEach((value) => {
@@ -41,18 +42,19 @@ const options = {
 
     return {
       message,
-      nextStage: STAGES.ESPECIALIDADES,
+      nextStage: STAGES.ESPECIALIDADES, 
     }
   },
   2: () => {
-    const message =
-      '\n-----------------------------------\n1️⃣ - ```FAZER AGENDAMENTO``` \n0️⃣ - ```FALAR COM ATENDENTE```\n\n' +
-      neighborhoods +
-      '\n-----------------------------------\n1️⃣ - ```FAZER AGENDAMENTO``` \n0️⃣ - ```FALAR COM ATENDENTE``` '
+    let message = '🚨  TIPO DE EXAMES  🚨\n\n'
+
+    Object.keys(exame).forEach((value) => {
+      message += `${numbers_exam[value]} - _${exame[value].description}_ \n`
+    })
 
     return {
       message,
-      nextStage: null,
+      nextStage: STAGES.TIPOEXAME, 
     }
   },
   0: () => {
@@ -70,4 +72,9 @@ const numbers = {
   3: '3️⃣',
   4: '4️⃣',
   5: '5️⃣',
+}
+
+const numbers_exam = {
+  1: '1️⃣',
+  2: '2️⃣',
 }

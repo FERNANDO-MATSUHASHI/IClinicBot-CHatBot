@@ -7,11 +7,9 @@ import https from 'https'
 
 function addCard(option) {
         if (option == 1){
-          return "Cartão de Crédito"
-        } else if (option == 2){
-          return  "Cartão de Débito"
+          return "Plano de Saúde"
         } else {
-          return "PIX"
+          return "Particular"
         }
 }
 
@@ -39,7 +37,7 @@ async function addAgendaChatBot(dados) {
 export const stageFour = {
   async exec({ from, message }) {
    
-    const isMsgValid = /[1|2|3|#|*]/.test(message)
+    const isMsgValid = /[1|2|#|*]/.test(message)
     const phone = from.split('@')
 
     let msg =
@@ -56,8 +54,8 @@ export const stageFour = {
                   `📞 Cliente: *${phone[0]}* \n` + 
                   `📃 Nome e Idade: *${storage[from].itens[2]}* \n` +
                   `👨‍🔬 Especialidade: *${storage[from].itens[0]}* \n` + 
-                  `💰 Forma de Pagamento: *${addCard(message)}*` +
-                  '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR atendimento```'
+                  `✍ Tipo de Consulta: *${addCard(message)}*` +
+                  '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR Atendimento```'
         
         storage[from].itens.push(addCard(message))
         
@@ -70,7 +68,8 @@ export const stageFour = {
           Cel: phone[0],
           Nome: storage[from].itens[2],
           Especialidade: storage[from].itens[0],
-          FormaPagamento: storage[from].itens[3]
+          TipoConsultaExame: storage[from].itens[3],
+          TipoAgendamento: "Consulta"
         };
         
         addAgendaChatBot(dados).then(response => {
