@@ -17,6 +17,16 @@ export const initialStage = {
       2️⃣ - AGENDAR UM EXAME
       0️⃣ - FALAR COM ATENDENTE
     `
+
+  //   const message = `
+  //   👋 Olá, como vai?
+  //   Eu sou Ana, a *assistente virtual* da ${venombot.getSessionName}.
+  //   *Posso te ajudar?* 🙋
+  //   -----------------------------------
+  //   1️⃣ - AGENDAR UMA CONSULTA
+  //   0️⃣ - FALAR COM ATENDENTE
+  // `
+
     await venombot.sendText({ to: from, message })
   },
 }

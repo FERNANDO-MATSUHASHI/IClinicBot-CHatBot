@@ -5,34 +5,49 @@ import {
   stageThree,
   stageFour,
   finalStage,
+  stageSix,
+  stageSeven,
+  stageEight
 } from './stages/index.js'
 
 import { storage } from './storage.js'
 
 export const stages = [
   {
-    descricao: 'Welcome',
+    descricao: 'Menu',
     stage: initialStage,
   },
   {
-    descricao: 'Menu',
+    descricao: 'Especialidades_Exames',
     stage: stageOne,
   },
   {
-    descricao: 'Specialties',
+    descricao: 'Data_Consulta',
     stage: stageTwo,
   },
   {
-    descricao: 'Bill',
+    descricao: 'Pagamento_Consulta',
     stage: stageThree,
   },
   {
-    descricao: 'Scheduling',
+    descricao: 'Resumo_Consulta',
     stage: stageFour,
   },
   {
-    descricao: 'Assistent',
-    stage: finalStage,
+    descricao: 'Falar_Com_Atendente',
+    stage: finalStage, 
+  },
+  {
+    descricao: 'Data_exame',
+    stage: stageSix,
+  },
+  {
+    descricao: 'Pagamento Exame',
+    stage: stageSeven,
+  },
+  {
+    descricao: 'Resumo_Exame',
+    stage: stageEight,
   },
 ]
 
@@ -44,8 +59,7 @@ export function getStage({ from }) {
   storage[from] = {
     stage: 0,
     itens: [],
-    address: '',
   }
 
-  return storage[from].stage
+  return storage[from].stage 
 }

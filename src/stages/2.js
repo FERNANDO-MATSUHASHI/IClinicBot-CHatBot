@@ -7,7 +7,7 @@ import axios from 'axios'
 import https from 'https'
 
 async function fetchAgenda(especialidade) {
-  
+
   try {
     const response = await axios.get('https://localhost:7112/api/AgendaMedico', {
       httpsAgent: new https.Agent({ rejectUnauthorized: false })
@@ -38,25 +38,35 @@ export const stageTwo = {
         storage[params.from].stage = option.nextStage
       } else {
 
-        const agenda = await fetchAgenda(menu[message].description)
+        if (storage[params.from].itens.length === 0) {
+          const agenda = await fetchAgenda(menu[message].description)
 
-        const dataAgendaList = agenda.map(item => {
-          const data = new Date(item.dataAgendaDisponivel)
-          const dia = String(data.getDate()).padStart(2, '0')
-          const mes = String(data.getMonth() + 1).padStart(2, '0')
-          const ano = data.getFullYear()
-          return `${dia}/${mes}/${ano}`
-        });
-        const dataAgendaJSON = JSON.stringify(dataAgendaList).replace(/[\[\]"]/g, '')
+          const dataAgendaList = agenda.map(item => {
+            const data = new Date(item.dataAgendaDisponivel)
+            const dia = String(data.getDate()).padStart(2, '0')
+            const mes = String(data.getMonth() + 1).padStart(2, '0')
+            const ano = data.getFullYear()
 
-        msg =
-          `✅ *${menu[message].description}* selecionado com sucesso! \n\n` +
-          '```Data disponível```: \n\n' + dataAgendaJSON +
-          '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR atendimento```'
+            const hora = String(data.getHours()).padStart(2, '0')
+            let minuto = String(data.getMinutes()).padStart(2, '0')
 
-        // Adicionado ao itens a Especialidade e a Data
-        storage[params.from].itens.push(menu[message].description)
-        storage[params.from].itens.push(dataAgendaJSON)
+            return `${dia}/${mes}/${ano} - ${hora}:${minuto}`
+          });
+
+          const dataAgendaJSON = JSON.stringify(dataAgendaList).replace(/[\[\]"]/g, '')
+
+          msg =
+            `✅ *${menu[message].description}* selecionado com sucesso! \n\n` +
+            '```Data disponível```: \n\n' + dataAgendaJSON +
+            '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR Atendimento```'
+
+          // Adicionado ao itens a Especialidade e a Data
+          storage[params.from].itens.push(menu[message].description)
+          storage[params.from].itens.push(dataAgendaJSON)
+          // console.log('storage: ', storage[params.from])
+        } else {
+          let msg = '❌ *Digite uma opção válida, por favor.* \n⚠️ ```APENAS UMA OPÇÃO POR VEZ``` ⚠️'
+        }
 
       }
 
@@ -68,8 +78,8 @@ export const stageTwo = {
     }
     // console.log('storege: ', storage[params.from].itens)
 
-    await VenomBot.getInstance().sendText({ 
-      to: params.from, 
+    await VenomBot.getInstance().sendText({
+      to: params.from,
       message: msg,
     })
   },
@@ -86,9 +96,10 @@ const options = {
     }
   },
   '#': (params, from) => {
-    const msg = '*Digite seu NOME e IDADE:*\n' + 
-    '( ```Nome, Idade``` )\n\n'
+    const msg = '*Digite seu NOME e IDADE:*\n' +
+      '( ```Nome, Idade``` )\n\n'
     // storage[params.from].itens.push(msg)
+
     return {
       to: from,
       message: msg,

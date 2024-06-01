@@ -7,24 +7,33 @@ import https from 'https'
 
 function addCard(option) {
         if (option == 1){
-          return "Cartão de Crédito"
-        } else if (option == 2){
-          return  "Cartão de Débito"
+          return "Plano de Saúde"
         } else {
-          return "PIX"
+          return "Particular"
         }
 }
 
-function convertDateToISO(dateString) {
-  const [day, month, year] = dateString.split('/').map(Number);
-  const date = new Date(year, month - 1, day, 10, 0, 0);
-  return date.toISOString().split('.')[0];
+function convertDateToISO(dataAgendaChatBot) {
+  // Dividir a string de data e hora
+  const [data, hora] = dataAgendaChatBot.split(' - ')
+
+  // Dividir a data em dia, mês e ano
+  const [dia, mes, ano] = data.split('/')
+
+  // Dividir a hora em horas e minutos
+  const [horas, minutos] = hora.split(':')
+
+  // Criar um objeto Date usando os componentes extraídos
+  const dataObj = `${ano}-${mes}-${dia}T${horas}:${minutos}:00`
+
+  // Retornar a string no formato ISO 8601
+  return dataObj
 }
 
 async function addAgendaChatBot(dados) {
   
   try {
-    dados.DataAgendaChatBot = convertDateToISO(dados.DataAgendaChatBot);
+    dados.DataAgendaChatBot = convertDateToISO(dados.DataAgendaChatBot)
 
     const response = await axios.post('https://localhost:7112/api/AgendaChatBot', dados, {
       httpsAgent: new https.Agent({ rejectUnauthorized: false })
@@ -39,7 +48,7 @@ async function addAgendaChatBot(dados) {
 export const stageFour = {
   async exec({ from, message }) {
    
-    const isMsgValid = /[1|2|3|#|*]/.test(message)
+    const isMsgValid = /[1|2|#|*]/.test(message)
     const phone = from.split('@')
 
     let msg =
@@ -56,8 +65,8 @@ export const stageFour = {
                   `📞 Cliente: *${phone[0]}* \n` + 
                   `📃 Nome e Idade: *${storage[from].itens[2]}* \n` +
                   `👨‍🔬 Especialidade: *${storage[from].itens[0]}* \n` + 
-                  `💰 Forma de Pagamento: *${addCard(message)}*` +
-                  '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR atendimento```'
+                  `✍ Tipo de Consulta: *${addCard(message)}*` +
+                  '\n-----------------------------------\n#️⃣ - ```CONFIRMAR Agendamento``` \n*️⃣ - ```ENCERRAR Atendimento```'
         
         storage[from].itens.push(addCard(message))
         
@@ -70,7 +79,8 @@ export const stageFour = {
           Cel: phone[0],
           Nome: storage[from].itens[2],
           Especialidade: storage[from].itens[0],
-          FormaPagamento: storage[from].itens[3]
+          TipoConsultaExame: storage[from].itens[3],
+          TipoAgendamento: "Consulta"
         };
         
         addAgendaChatBot(dados).then(response => {
