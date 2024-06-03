@@ -40,4 +40,12 @@ As seguintes ferramentas foram usadas na construção do projeto:
 
 - [Node.js](https://nodejs.org/en/)
 
+### FrontEnd
+
+- https://github.com/VictorMMontanari/IClinicBot.git
+
+### BackEnd
+
+- https://github.com/HeitorSKimura/IClinicBot_BackEnd.git
+
 "# IClinicBot-ChatBot" 
